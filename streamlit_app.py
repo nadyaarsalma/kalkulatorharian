@@ -2,8 +2,6 @@ import streamlit as st
 import plotly.express as px
 from streamlit_lottie import st_lottie
 import requests
-import time
-import io
 
 # ------ SETTING HALAMAN ------
 st.set_page_config(page_title="🧮Kalkulator Sampah", layout="wide")
@@ -70,27 +68,30 @@ elif menu == "🔄 Proses":
     st.markdown("<div style='margin-top: 30px'></div>", unsafe_allow_html=True)
     st.title("🔄 Proses Pengelolaan Sampah")
 
-    st.markdown("Berikut adalah tahapan umum dalam pengelolaan sampah rumah tangga:")
+    st.markdown("""
+    Berikut adalah tahapan umum dalam pengelolaan sampah rumah tangga:
 
-    with st.expander("📌 1. Pemilahan"):
-        st.write("Pisahkan sampah menjadi Organik, Anorganik, dan B3 sejak di rumah.")
-        
+    ### 📌 1. Pemilahan
+    Pisahkan sampah menjadi:
+    - *Organik:* sisa makanan, daun kering, kulit buah
+    - *Anorganik:* plastik, kaca, kaleng, kertas
+    - *B3:* baterai, lampu neon, obat kedaluwarsa, elektronik rusak
 
-    with st.expander("📌 2. Pengumpulan"):
-        st.write("Sampah dikumpulkan berdasarkan jenis untuk memudahkan pemrosesan.")
-       
+    ### 📌 2. Pengumpulan
+    Sampah dikumpulkan berdasarkan jenisnya untuk memudahkan pemrosesan lebih lanjut.
 
-    with st.expander("📌 3. Pengangkutan"):
-        st.write("Petugas kebersihan mengangkut sampah ke TPS atau pusat daur ulang.")
-        
+    ### 📌 3. Pengangkutan
+    Petugas kebersihan mengangkut sampah ke TPS atau pusat daur ulang terdekat.
 
-    with st.expander("📌 4. Pemrosesan / Daur Ulang"):
-        st.write("Organik → Kompos, Anorganik → Daur ulang, B3 → Penanganan khusus.")
-        
+    ### 📌 4. Pemrosesan / Daur Ulang
+    - Organik → Kompos
+    - Anorganik → Daur ulang
+    - B3 → Penanganan khusus di fasilitas tertentu
 
-    with st.expander("📌 5. Pembuangan Akhir"):
-        st.write("Sampah sisa yang tidak bisa diproses dibuang ke TPA secara aman.")
-        
+    ### 📌 5. Pembuangan Akhir
+    Sampah sisa yang tidak bisa diproses akan dibuang ke TPA secara aman dan terkontrol.
+    """)
+
 
 
 # ------ KALKULATOR ------
@@ -122,6 +123,8 @@ elif menu == "🧮 Kalkulator":
             st.metric("Total Sampah", f"{total} kg")
         with col2:
             st.metric("Sampah per Orang", f"{base_waste:.2f} kg")
+        if base_waste > 2:
+            st.error("⚠ Oops! Kamu membuang sampah melebihi 2 kg per orang per hari. Yuk mulai kurangi sampah!")
 
         fig = px.pie(
             names=["Organik", "Anorganik", "B3"],
@@ -158,6 +161,9 @@ elif menu == "🧮 Kalkulator":
                 st.metric("Total Sampah", f"{total_manual} kg")
             with col2:
                 st.metric("Sampah per Orang", f"{total_manual / people:.2f} kg")
+            if (total_manual / people) > 2:
+                st.error("⚠ Oops! Kamu membuang sampah melebihi 2 kg per orang per hari. Yuk kurangi jumlahnya!")
+
 
             fig_manual = px.pie(
                 names=["Organik", "Anorganik", "B3"],
@@ -174,7 +180,7 @@ elif menu == "🧮 Kalkulator":
                 st.info("Kurangi plastik, gunakan ulang barang jika bisa.")
             if b3_input > 0.1:
                 st.warning("Pisahkan limbah B3 seperti baterai atau elektronik kecil!")
-
+        
 
 # ------ TENTANG ------
 elif menu == "ℹ Tentang":
@@ -192,4 +198,6 @@ elif menu == "ℹ Tentang":
         *Dibuat oleh:* Kelompok 5-PLI AKA
         
         *Teknologi:* Streamlit + Plotly + Lottie  
+
+        *Baku Mutu:* Peraturan Menteri Lingkungan Hidup dan Kehutanan (Permen LHK) No. P.75 Tahun 2019
         """)
